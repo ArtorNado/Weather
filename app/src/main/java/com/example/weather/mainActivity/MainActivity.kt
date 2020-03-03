@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import com.example.weather.ApiFactory
 import com.example.weather.R
 import com.example.weather.WeatherService
+import com.example.weather.constants.Constants
 import com.example.weather.response.WeatherResponse
 import com.example.weather.weatherInfo.InfoActivity
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -27,15 +28,15 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private var adapter: CityAdapter? = null
     private lateinit var service: WeatherService
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var lat: Double = 56.0
-    private var lon: Double = 45.0
+    private var latitude: Double = Constants.COORDINATES.DEFAULT_LATITUDE
+    private var longitude: Double = Constants.COORDINATES.DEFAULT_LONGITUDE
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        checkPermissions(Manifest.permission.ACCESS_FINE_LOCATION, 1000)
+        checkPermissions(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_CODE)
         setSeacrhListener()
     }
 
@@ -73,7 +74,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             launch {
                 try{
                 val response = withContext(Dispatchers.IO) {
-                    service.citiesInCicle(lat, lon, 10)
+                    service.citiesInCicle(latitude, longitude, CITY_COUNT)
                 }
                 if (response.isSuccessful) {
                     setAdapter(response.body()?.list)
@@ -96,8 +97,8 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     private fun getGeoPisition(){
         fusedLocationClient.lastLocation.addOnSuccessListener {
-            lat = it.latitude
-            lon = it.longitude
+            latitude = it.latitude
+            longitude = it.longitude
             setWeatherInNearestCity()
         }
     }
@@ -125,7 +126,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            1000 ->
+            REQUEST_CODE ->
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) getGeoPisition()
                 else setWeatherInNearestCity()
         }
@@ -144,6 +145,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     override fun onDestroy(){
         super.onDestroy()
         coroutineContext.cancelChildren()
+    }
+
+    companion object {
+        private const val REQUEST_CODE = 1000
+        private const val CITY_COUNT = 10
     }
 
 }

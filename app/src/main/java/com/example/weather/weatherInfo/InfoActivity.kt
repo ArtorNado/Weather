@@ -32,10 +32,14 @@ class InfoActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         tv_cityName.text = weather?.name
         tv_weather.text = weather?.weathers?.get(0)?.description
         Log.e("WEATHER - ", weather?.weathers?.get(0)?.main.toString())
-        if(thunderWeather.contains(weather?.weathers?.get(0)?.main.toString())) info_main_layout.setBackgroundResource(R.drawable.thunder)
-        if(rainWeather.contains(weather?.weathers?.get(0)?.main.toString())) info_main_layout.setBackgroundResource(R.drawable.rain)
-        if(cloudy.contains(weather?.weathers?.get(0)?.main.toString())) info_main_layout.setBackgroundResource(R.drawable.cloudy_day)
-        if(sunny.contains(weather?.weathers?.get(0)?.main.toString())) info_main_layout.setBackgroundResource(R.drawable.sunny)
+        if(thunderWeather.contains(weather?.weathers?.get(0)?.main.toString()))
+            info_main_layout.setBackgroundResource(R.drawable.thunder)
+        if(rainWeather.contains(weather?.weathers?.get(0)?.main.toString()))
+            info_main_layout.setBackgroundResource(R.drawable.rain)
+        if(cloudy.contains(weather?.weathers?.get(0)?.main.toString()))
+            info_main_layout.setBackgroundResource(R.drawable.cloudy_day)
+        if(sunny.contains(weather?.weathers?.get(0)?.main.toString()))
+            info_main_layout.setBackgroundResource(R.drawable.sunny)
     }
 
     private fun getCityInfoById(cityId : String){
@@ -71,7 +75,8 @@ class InfoActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     companion object{
         var thunderWeather = listOf("Thunderstorm")
         var rainWeather = listOf("Drizzle", "Rain")
-        var cloudy = listOf("Mist", "Smoke", "Haze", "Dust", "Fog", "Sand", "Dust", "Ash", "Squall", "Tornado", "Clouds")
+        var cloudy = listOf("Mist", "Smoke", "Haze", "Dust", "Fog", "Sand", "Dust",
+            "Ash", "Squall", "Tornado", "Clouds")
         var sunny = listOf("Clear")
 
     }

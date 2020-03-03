@@ -15,7 +15,8 @@ class WeatherAdapter(
     private var dataSet: List<Any?>
 ) : RecyclerView.Adapter<WeatherViewHolder<*>>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder<*> { Log.e("onCreateViewHolder ", "START")
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder<*> {
+        Log.e("onCreateViewHolder ", "START")
        return when(viewType){
            TYPE_TEMPERATURE ->{
                TemperatureHolder(LayoutInflater.from(parent.context)
