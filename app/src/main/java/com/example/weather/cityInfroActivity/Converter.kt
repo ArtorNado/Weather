@@ -1,4 +1,4 @@
-package com.example.weather.weatherInfo
+package com.example.weather.cityInfroActivity
 
 import com.example.weather.constants.Constants
 
@@ -8,7 +8,7 @@ class Converter {
 
         fun windDirection(degree: Int?): String {
             return when (degree) {
-                in Constants.DIRECTION.NORTH_NORTH_EAST-> "North-north-east"
+                in Constants.DIRECTION.NORTH_NORTH_EAST -> "North-north-east"
                 in Constants.DIRECTION.SOUTH_EAST -> "South-east"
                 in Constants.DIRECTION.EAST_NORTH_EAST -> "East-north-east"
                 in Constants.DIRECTION.EAST -> "East"

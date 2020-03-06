@@ -1,4 +1,4 @@
-package com.example.weather.weatherInfo
+package com.example.weather.cityInfroActivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,8 +9,8 @@ import com.example.weather.R
 import com.example.weather.WeatherService
 import com.example.weather.mainActivity.WeatherAdapter
 import com.example.weather.response.WeatherResponse
-import com.example.weather.weatherInfo.recyclerForInfoPage.TemperatureDataModel
-import com.example.weather.weatherInfo.recyclerForInfoPage.WeatherDataModel
+import com.example.weather.cityInfroActivity.recyclerForInfoPage.TemperatureDataModel
+import com.example.weather.cityInfroActivity.recyclerForInfoPage.WeatherDataModel
 import kotlinx.android.synthetic.main.activity_info.*
 import kotlinx.coroutines.*
 
@@ -31,7 +31,6 @@ class InfoActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private fun setMainInformation(weather: WeatherResponse?){
         tv_cityName.text = weather?.name
         tv_weather.text = weather?.weathers?.get(0)?.description
-        Log.e("WEATHER - ", weather?.weathers?.get(0)?.main.toString())
         if(thunderWeather.contains(weather?.weathers?.get(0)?.main.toString()))
             info_main_layout.setBackgroundResource(R.drawable.thunder)
         if(rainWeather.contains(weather?.weathers?.get(0)?.main.toString()))
@@ -78,6 +77,5 @@ class InfoActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         var cloudy = listOf("Mist", "Smoke", "Haze", "Dust", "Fog", "Sand", "Dust",
             "Ash", "Squall", "Tornado", "Clouds")
         var sunny = listOf("Clear")
-
     }
 }

@@ -9,17 +9,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.example.weather.ApiFactory
 import com.example.weather.R
 import com.example.weather.WeatherService
+import com.example.weather.cityInfroActivity.InfoActivity
 import com.example.weather.constants.Constants
 import com.example.weather.response.WeatherResponse
-import com.example.weather.weatherInfo.InfoActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
+import java.net.UnknownHostException
 
 
 class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
@@ -36,11 +39,11 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        checkPermissions(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_CODE)
-        setSeacrhListener()
+        checkPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Constants.REQUESTS.REQUEST_CODE)
+        setSearchListener()
     }
 
-    private fun setSeacrhListener() {
+    private fun setSearchListener() {
         sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextChange(s: String): Boolean {
@@ -71,10 +74,10 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     private fun setWeatherInNearestCity() {
         service = ApiFactory.weatherService
-            launch {
-                try{
+        launch {
+            try {
                 val response = withContext(Dispatchers.IO) {
-                    service.citiesInCicle(latitude, longitude, CITY_COUNT)
+                    service.citiesInCicle(latitude, longitude, Constants.NEAR_CITY.CITY_COUNT)
                 }
                 if (response.isSuccessful) {
                     setAdapter(response.body()?.list)
@@ -85,21 +88,41 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                         Snackbar.LENGTH_INDEFINITE
                     ).show()
                 }
-            } catch(ex: Exception){
-                    Snackbar.make(
-                        findViewById(android.R.id.content),
-                        ex.toString(),
-                        Snackbar.LENGTH_INDEFINITE
-                    ).show()
-                }
+            } catch (ex: UnknownHostException) {
+                Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "No internet connection",
+                    Snackbar.LENGTH_INDEFINITE
+                ).show()
             }
+        }
     }
 
-    private fun getGeoPisition(){
+    private fun getGeoPisition() {
         fusedLocationClient.lastLocation.addOnSuccessListener {
             latitude = it.latitude
             longitude = it.longitude
-            setWeatherInNearestCity()
+            setObserver()
+        }
+    }
+
+    private fun setObserver() {
+        try {
+            val mainViewModel by lazy {
+                ViewModelProviders.of(
+                    this,
+                    ModelFactory(latitude, longitude)
+                ).get(MainViewModel::class.java)
+            }
+            mainViewModel.cityList.observe(this, Observer { it ->
+                setAdapter(it)
+            })
+        } catch (ex: UnknownHostException) {
+            Snackbar.make(
+                findViewById(android.R.id.content),
+                "No internet connection",
+                Snackbar.LENGTH_INDEFINITE
+            ).show()
         }
     }
 
@@ -126,7 +149,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
-            REQUEST_CODE ->
+            Constants.REQUESTS.REQUEST_CODE ->
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) getGeoPisition()
                 else setWeatherInNearestCity()
         }
@@ -142,14 +165,9 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     }
 
 
-    override fun onDestroy(){
+    override fun onDestroy() {
         super.onDestroy()
         coroutineContext.cancelChildren()
-    }
-
-    companion object {
-        private const val REQUEST_CODE = 1000
-        private const val CITY_COUNT = 10
     }
 
 }

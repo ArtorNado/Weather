@@ -1,4 +1,4 @@
-package com.example.weather.weatherInfo.recyclerForInfoPage
+package com.example.weather.cityInfroActivity.recyclerForInfoPage
 
 data class WeatherDataModel(
     var data: String,

@@ -42,4 +42,16 @@ class Constants {
             const val DEFAULT_LONGITUDE = 45.0
         }
     }
+
+    interface NEAR_CITY{
+        companion object{
+            const val CITY_COUNT = 10
+        }
+    }
+
+    interface REQUESTS{
+        companion object {
+            const val REQUEST_CODE = 1000
+        }
+    }
 }

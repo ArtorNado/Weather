@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weather.R
-import com.example.weather.weatherInfo.recyclerForInfoPage.TemperatureDataModel
-import com.example.weather.weatherInfo.recyclerForInfoPage.TemperatureHolder
-import com.example.weather.weatherInfo.recyclerForInfoPage.WeatherDataHolder
-import com.example.weather.weatherInfo.recyclerForInfoPage.WeatherDataModel
+import com.example.weather.cityInfroActivity.recyclerForInfoPage.TemperatureDataModel
+import com.example.weather.cityInfroActivity.recyclerForInfoPage.TemperatureHolder
+import com.example.weather.cityInfroActivity.recyclerForInfoPage.WeatherDataHolder
+import com.example.weather.cityInfroActivity.recyclerForInfoPage.WeatherDataModel
 
 
 class WeatherAdapter(

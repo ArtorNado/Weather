@@ -1,4 +1,4 @@
-package com.example.weather.weatherInfo.recyclerForInfoPage
+package com.example.weather.cityInfroActivity.recyclerForInfoPage
 
 import android.view.View
 import com.example.weather.mainActivity.WeatherViewHolder
