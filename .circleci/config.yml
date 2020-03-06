@@ -14,6 +14,4 @@ jobs:
       - run:
         name: Download Dependencies
         command: ./gradlew androidDependencies
-      - checkout
-      - run:
-          command: ./gradlew build
+     
