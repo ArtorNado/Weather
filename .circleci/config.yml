@@ -9,8 +9,11 @@ jobs:
         
     steps:
       - run:
-          name: chmod permissions
-          command: chmod +x ./gradlew
+        name: Chmod permissions
+        command: sudo chmod +x ./gradlew
+      - run:
+        name: Download Dependencies
+        command: ./gradlew androidDependencies
       - checkout
       - run:
           command: ./gradlew build
