@@ -11,7 +11,7 @@ class Converter {
                 in Constants.DIRECTION.NORTH_NORTH_EAST -> "North-north-east"
                 in Constants.DIRECTION.SOUTH_EAST -> "South-east"
                 in Constants.DIRECTION.EAST_NORTH_EAST -> "East-north-east"
-                in 5..123123 -> "East"
+                in Constants.DIRECTION.EAST -> "East"
                 in Constants.DIRECTION.EAST_SOUTH_EAST -> "East-south-east"
                 in Constants.DIRECTION.SOUTH_EAST2 -> "South-east"
                 in Constants.DIRECTION.SOUTH_SOUTH_EAST -> "South-south-east"
