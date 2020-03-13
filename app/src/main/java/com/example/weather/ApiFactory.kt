@@ -7,10 +7,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiFactory {
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private val authInterceptor = Interceptor { chain ->
-        // better use separate classes for Interceptors
         val newUrl = chain.request().url().newBuilder()
             .addQueryParameter("units", "metric")
             .addQueryParameter("appid", BuildConfig.API_KEY)
