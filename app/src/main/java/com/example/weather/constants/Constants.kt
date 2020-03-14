@@ -43,7 +43,7 @@ class Constants {
         }
     }
 
-    interface NEAR_CITY{
+    interface NEARCITY{
         companion object{
             const val CITY_COUNT = 10
         }

@@ -2,7 +2,6 @@ package com.example.weather.cityInfroActivity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import com.example.weather.ApiFactory
 import com.example.weather.R

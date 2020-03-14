@@ -18,7 +18,7 @@ class MainViewModel(private var latitude: Double, private var longitude: Double)
     init {
         launch {
             val response = withContext(Dispatchers.IO) {
-                service.citiesInCicle(latitude, longitude, Constants.NEAR_CITY.CITY_COUNT)
+                service.citiesInCicle(latitude, longitude, Constants.NEARCITY.CITY_COUNT)
             }
             if (response.isSuccessful) {
                 cityList.value = response.body()?.list

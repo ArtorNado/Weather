@@ -77,7 +77,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         launch {
             try {
                 val response = withContext(Dispatchers.IO) {
-                    service.citiesInCicle(latitude, longitude, Constants.NEAR_CITY.CITY_COUNT)
+                    service.citiesInCicle(latitude, longitude, Constants.NEARCITY.CITY_COUNT)
                 }
                 if (response.isSuccessful) {
                     setAdapter(response.body()?.list)
