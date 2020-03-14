@@ -10,39 +10,31 @@ import com.example.weather.cityInfroActivity.recyclerForInfoPage.TemperatureHold
 import com.example.weather.cityInfroActivity.recyclerForInfoPage.WeatherDataHolder
 import com.example.weather.cityInfroActivity.recyclerForInfoPage.WeatherDataModel
 
-
 class WeatherAdapter(
     private var dataSet: List<Any?>
 ) : RecyclerView.Adapter<WeatherViewHolder<*>>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder<*> {
         Log.e("onCreateViewHolder ", "START")
-       return when(viewType){
-           TYPE_TEMPERATURE ->{
-               TemperatureHolder(LayoutInflater.from(parent.context)
-                   .inflate(R.layout.temperature_template, parent, false))
-
-           }
-           TYPE_ANOTHER_DATA ->{
-               WeatherDataHolder(LayoutInflater.from(parent.context)
-                   .inflate(R.layout.another_weather_data_template, parent, false))
-           }
-           else -> throw IllegalArgumentException("Invalid view type")
-       }
+        return when (viewType) {
+            TYPE_TEMPERATURE -> TemperatureHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.temperature_template, parent, false)
+            )
+            TYPE_ANOTHER_DATA -> WeatherDataHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.another_weather_data_template, parent, false)
+            )
+            else -> throw IllegalArgumentException("Invalid view type")
+        }
     }
 
-    override fun getItemCount(): Int{
-        return dataSet.size
-    }
+    override fun getItemCount() = dataSet.size
 
     override fun onBindViewHolder(holder: WeatherViewHolder<*>, position: Int) {
-        when(holder){
-            is TemperatureHolder ->{
-                holder.bind(dataSet[position] as TemperatureDataModel)
-            }
-            is WeatherDataHolder ->{
-                holder.bind(dataSet[position] as WeatherDataModel)
-            }
+        when (holder) {
+            is TemperatureHolder -> holder.bind(dataSet[position] as TemperatureDataModel)
+            is WeatherDataHolder -> holder.bind(dataSet[position] as WeatherDataModel)
             else -> throw IllegalArgumentException("invalid holder type")
         }
     }

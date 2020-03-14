@@ -8,7 +8,6 @@ import com.example.weather.constants.Constants
 import com.example.weather.response.WeatherResponse
 import kotlinx.coroutines.*
 
-
 class MainViewModel(private var latitude: Double, private var longitude: Double) : ViewModel(),
     CoroutineScope by MainScope() {
 

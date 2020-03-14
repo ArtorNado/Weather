@@ -20,9 +20,7 @@ class CityAdapter(
         holder.bind(city[position])
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return super.getItemViewType(position)
-    }
+    override fun getItemViewType(position: Int) = super.getItemViewType(position)
 
 
 }

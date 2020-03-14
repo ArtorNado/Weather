@@ -9,7 +9,9 @@ class ModelFactory(private var latitude: Double, private var longitude: Double) 
     override fun <T : ViewModel?> create(modelClass: Class<T?>): T {
         return if (modelClass == MainViewModel::class.java) {
             MainViewModel(latitude, longitude) as T
-        } else throw IllegalArgumentException("Invalid view model type")
+        } else{
+            throw IllegalArgumentException("Invalid view model type")
+        }
     }
 
 }

@@ -24,13 +24,13 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
 import java.net.UnknownHostException
 
-
 class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
 
     private var adapter: CityAdapter? = null
-    private lateinit var service: WeatherService
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var service: WeatherService = ApiFactory.weatherService
+    private var fusedLocationClient: FusedLocationProviderClient =
+        LocationServices.getFusedLocationProviderClient(this)
     private var latitude: Double = Constants.COORDINATES.DEFAULT_LATITUDE
     private var longitude: Double = Constants.COORDINATES.DEFAULT_LONGITUDE
 
@@ -38,7 +38,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         checkPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Constants.REQUESTS.REQUEST_CODE)
         setSearchListener()
     }
@@ -52,7 +51,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
             override fun onQueryTextSubmit(s: String): Boolean {
                 launch {
-                    service = ApiFactory.weatherService
                     val response = withContext(Dispatchers.IO) {
                         service.weatherByName(sv.query.toString())
                     }
@@ -114,7 +112,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     ModelFactory(latitude, longitude)
                 ).get(MainViewModel::class.java)
             }
-            mainViewModel.cityList.observe(this, Observer { it ->
+            mainViewModel.cityList.observe(this, Observer {
                 setAdapter(it)
             })
         } catch (ex: UnknownHostException) {

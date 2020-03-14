@@ -17,7 +17,7 @@ class InfoActivity : AppCompatActivity(), CoroutineScope by MainScope() {
 
     private var adapter: WeatherAdapter? = null
     private var cityId: String? = null
-    private lateinit var service: WeatherService
+    private var service: WeatherService = ApiFactory.weatherService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +41,6 @@ class InfoActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     }
 
     private fun getCityInfoById(cityId : String){
-        service = ApiFactory.weatherService
         launch {
             val response = withContext(Dispatchers.IO) {
                 service.weatherById(cityId)
@@ -56,7 +55,7 @@ class InfoActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         }
     }
     private fun setAdapter(weather: WeatherResponse?) {
-        var list  = listOf(
+        val list  = listOf(
             TemperatureDataModel(weather?.main?.temp?.toInt().toString()),
             WeatherDataModel(weather?.main?.feelsLike?.toInt().toString(), "feels like"),
             WeatherDataModel(weather?.main?.pressure.toString(), "pressure"),

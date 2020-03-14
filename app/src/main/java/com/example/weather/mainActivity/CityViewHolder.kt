@@ -21,7 +21,7 @@ class CityViewHolder(
 
     fun bind(weather: WeatherResponse) {
         tvCity.text = weather.name
-        tvCityTemperature.text = (weather.main.temp).toInt().toString()
+        tvCityTemperature.text = weather.main.temp.toInt().toString()
         textColor(weather.main.temp)
         itemView.setOnClickListener {
             clickLambda(weather)
