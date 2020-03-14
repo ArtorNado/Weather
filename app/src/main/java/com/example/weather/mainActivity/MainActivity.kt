@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
     private var latitude: Double = Constants.COORDINATES.DEFAULT_LATITUDE
     private var longitude: Double = Constants.COORDINATES.DEFAULT_LONGITUDE
 
-
+    //some comment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
