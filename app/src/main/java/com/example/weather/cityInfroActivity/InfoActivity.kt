@@ -1,15 +1,15 @@
 package com.example.weather.cityInfroActivity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.weather.ApiFactory
 import com.example.weather.R
 import com.example.weather.WeatherService
-import com.example.weather.mainActivity.WeatherAdapter
-import com.example.weather.response.WeatherResponse
 import com.example.weather.cityInfroActivity.recyclerForInfoPage.TemperatureDataModel
 import com.example.weather.cityInfroActivity.recyclerForInfoPage.WeatherDataModel
+import com.example.weather.mainActivity.WeatherAdapter
+import com.example.weather.response.WeatherResponse
 import kotlinx.android.synthetic.main.activity_info.*
 import kotlinx.coroutines.*
 
@@ -27,20 +27,20 @@ class InfoActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         cityId?.let { getCityInfoById(it) }
     }
 
-    private fun setMainInformation(weather: WeatherResponse?){
+    private fun setMainInformation(weather: WeatherResponse?) {
         tv_cityName.text = weather?.name
         tv_weather.text = weather?.weathers?.get(0)?.description
-        if(thunderWeather.contains(weather?.weathers?.get(0)?.main.toString()))
+        if (thunderWeather.contains(weather?.weathers?.get(0)?.main.toString()))
             info_main_layout.setBackgroundResource(R.drawable.thunder)
-        if(rainWeather.contains(weather?.weathers?.get(0)?.main.toString()))
+        if (rainWeather.contains(weather?.weathers?.get(0)?.main.toString()))
             info_main_layout.setBackgroundResource(R.drawable.rain)
-        if(cloudy.contains(weather?.weathers?.get(0)?.main.toString()))
+        if (cloudy.contains(weather?.weathers?.get(0)?.main.toString()))
             info_main_layout.setBackgroundResource(R.drawable.cloudy_day)
-        if(sunny.contains(weather?.weathers?.get(0)?.main.toString()))
+        if (sunny.contains(weather?.weathers?.get(0)?.main.toString()))
             info_main_layout.setBackgroundResource(R.drawable.sunny)
     }
 
-    private fun getCityInfoById(cityId : String){
+    private fun getCityInfoById(cityId: String) {
         launch {
             val response = withContext(Dispatchers.IO) {
                 service.weatherById(cityId)
@@ -54,8 +54,9 @@ class InfoActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             }
         }
     }
+
     private fun setAdapter(weather: WeatherResponse?) {
-        val list  = listOf(
+        val list = listOf(
             TemperatureDataModel(weather?.main?.temp?.toInt().toString()),
             WeatherDataModel(weather?.main?.feelsLike?.toInt().toString(), "feels like"),
             WeatherDataModel(weather?.main?.pressure.toString(), "pressure"),
@@ -69,11 +70,13 @@ class InfoActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         rv_data.adapter = adapter
     }
 
-    companion object{
+    companion object {
         var thunderWeather = listOf("Thunderstorm")
         var rainWeather = listOf("Drizzle", "Rain")
-        var cloudy = listOf("Mist", "Smoke", "Haze", "Dust", "Fog", "Sand", "Dust",
-            "Ash", "Squall", "Tornado", "Clouds")
+        var cloudy = listOf(
+            "Mist", "Smoke", "Haze", "Dust", "Fog", "Sand", "Dust",
+            "Ash", "Squall", "Tornado", "Clouds"
+        )
         var sunny = listOf("Clear")
     }
 }

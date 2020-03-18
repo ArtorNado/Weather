@@ -1,8 +1,8 @@
 package com.example.weather.constants
 
 class Constants {
-    interface DIRECTION{
-        companion object{
+    interface DIRECTION {
+        companion object {
             val NORTH = 0..4
             val NORTH_NORTH_EAST = 5..24
             val SOUTH_EAST = 25..54
@@ -23,8 +23,8 @@ class Constants {
         }
     }
 
-    interface DIGRESS{
-        companion object{
+    interface DIGRESS {
+        companion object {
             val HARD_FROSTY = -100..-30
             val VERY_FROSTY = -29..-14
             val MODERATELY_FROSTY = -14..-7
@@ -36,20 +36,20 @@ class Constants {
         }
     }
 
-    interface COORDINATES{
-        companion object{
+    interface COORDINATES {
+        companion object {
             const val DEFAULT_LATITUDE = 56.0
             const val DEFAULT_LONGITUDE = 45.0
         }
     }
 
-    interface NEARCITY{
-        companion object{
+    interface NEARCITY {
+        companion object {
             const val CITY_COUNT = 10
         }
     }
 
-    interface REQUESTS{
+    interface REQUESTS {
         companion object {
             const val REQUEST_CODE = 1000
         }

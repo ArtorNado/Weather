@@ -28,23 +28,36 @@ class CityViewHolder(
         }
     }
 
-    private fun textColor(temp: Double){
+    private fun textColor(temp: Double) {
         when (temp) {
             in Constants.DIGRESS.HARD_FROSTY -> tvCityTemperature.setTextColor(Color.parseColor("#012852"))
             in Constants.DIGRESS.VERY_FROSTY -> tvCityTemperature.setTextColor(Color.parseColor("#00499C"))
-            in Constants.DIGRESS.MODERATELY_FROSTY -> tvCityTemperature.setTextColor(Color.parseColor("#02609C"))
+            in Constants.DIGRESS.MODERATELY_FROSTY -> tvCityTemperature.setTextColor(
+                Color.parseColor(
+                    "#02609C"
+                )
+            )
             in Constants.DIGRESS.LIGHTLY_FROSTY -> tvCityTemperature.setTextColor(Color.parseColor("#0073F7"))
             in Constants.DIGRESS.COOL -> tvCityTemperature.setTextColor(Color.parseColor("#0073F7"))
-            in Constants.DIGRESS.MODERATELY_WARM -> tvCityTemperature.setTextColor(Color.parseColor("#FF4A4A"))
+            in Constants.DIGRESS.MODERATELY_WARM -> tvCityTemperature.setTextColor(
+                Color.parseColor(
+                    "#FF4A4A"
+                )
+            )
             in Constants.DIGRESS.HOT -> tvCityTemperature.setTextColor(Color.parseColor("#FF0303"))
             in Constants.DIGRESS.EXTREMELY_HOT -> tvCityTemperature.setTextColor(Color.parseColor("#7F0000"))
         }
     }
+
     companion object {
 
         fun create(parent: ViewGroup, clickLambda: (WeatherResponse) -> Unit) =
             CityViewHolder(
-                LayoutInflater.from(parent.context).inflate(R.layout.city_recycler_template, parent, false),
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.city_recycler_template,
+                    parent,
+                    false
+                ),
                 clickLambda
             )
     }
