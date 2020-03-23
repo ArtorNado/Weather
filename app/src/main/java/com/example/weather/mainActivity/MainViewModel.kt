@@ -6,23 +6,19 @@ import com.example.weather.ApiFactory
 import com.example.weather.WeatherService
 import com.example.weather.constants.Constants
 import com.example.weather.response.WeatherResponse
-import kotlinx.coroutines.*
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
-class MainViewModel(private var latitude: Double, private var longitude: Double) : ViewModel(),
-    CoroutineScope by MainScope() {
+class MainViewModel(private var latitude: Double, private var longitude: Double) : ViewModel() {
 
     val cityList: MutableLiveData<List<WeatherResponse>> by lazy { MutableLiveData<List<WeatherResponse>>() }
     private var service: WeatherService = ApiFactory.weatherService
 
     init {
-        launch {
-            val response = withContext(Dispatchers.IO) {
-                service.citiesInCicle(latitude, longitude, Constants.NEARCITY.CITY_COUNT)
-            }
-            if (response.isSuccessful) {
-                cityList.value = response.body()?.list
-            }
-        }
+        service.citiesInCicle(latitude, longitude, Constants.NEARCITY.CITY_COUNT)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { result -> cityList.value = result.list }
     }
 
 }

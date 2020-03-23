@@ -20,26 +20,33 @@ import com.example.weather.response.WeatherResponse
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.snackbar.Snackbar
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.*
 import java.net.UnknownHostException
 
-class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
+class MainActivity : AppCompatActivity() {
 
 
     private var adapter: CityAdapter? = null
     private var service: WeatherService = ApiFactory.weatherService
-    private var fusedLocationClient: FusedLocationProviderClient =
-        LocationServices.getFusedLocationProviderClient(this)
+    private var fusedLocationClient: FusedLocationProviderClient? = null
     private var latitude: Double = Constants.COORDINATES.DEFAULT_LATITUDE
     private var longitude: Double = Constants.COORDINATES.DEFAULT_LONGITUDE
+    private var disposable: Disposable? = null
 
-    //some comment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         checkPermissions(Manifest.permission.ACCESS_FINE_LOCATION, Constants.REQUESTS.REQUEST_CODE)
         setSearchListener()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (disposable?.isDisposed == false) disposable?.dispose()
     }
 
     private fun setSearchListener() {
@@ -50,54 +57,26 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
             }
 
             override fun onQueryTextSubmit(s: String): Boolean {
-                launch {
-                    val response = withContext(Dispatchers.IO) {
-                        service.weatherByName(sv.query.toString())
-                    }
-                    if (response.isSuccessful) {
-                        setIntentForNextActivity("city id", response.body())
-                    } else {
-                        Toast.makeText(
-                            this@MainActivity,
-                            "U TEBYA BEDI S BASHKOY",
-                            Toast.LENGTH_SHORT
-                        )
-                            .show()
-                    }
-                }
+                disposable = service.weatherByName(sv.query.toString())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ result -> setIntentForNextActivity("city id", result) },
+                        { error ->
+                            Toast.makeText(
+                                this@MainActivity,
+                                "U TEBYA BEDI S BASHKOY",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        })
                 return true
             }
         })
     }
 
-    private fun setWeatherInNearestCity() {
-        service = ApiFactory.weatherService
-        launch {
-            try {
-                val response = withContext(Dispatchers.IO) {
-                    service.citiesInCicle(latitude, longitude, Constants.NEARCITY.CITY_COUNT)
-                }
-                if (response.isSuccessful) {
-                    setAdapter(response.body()?.list)
-                } else {
-                    Snackbar.make(
-                        findViewById(android.R.id.content),
-                        "Cant find this city",
-                        Snackbar.LENGTH_INDEFINITE
-                    ).show()
-                }
-            } catch (ex: UnknownHostException) {
-                Snackbar.make(
-                    findViewById(android.R.id.content),
-                    "No internet connection",
-                    Snackbar.LENGTH_INDEFINITE
-                ).show()
-            }
-        }
-    }
 
     private fun getGeoPisition() {
-        fusedLocationClient.lastLocation.addOnSuccessListener {
+        fusedLocationClient?.lastLocation?.addOnSuccessListener {
             latitude = it.latitude
             longitude = it.longitude
             setObserver()
@@ -149,7 +128,7 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         when (requestCode) {
             Constants.REQUESTS.REQUEST_CODE ->
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) getGeoPisition()
-                else setWeatherInNearestCity()
+                else setObserver()
         }
     }
 
@@ -160,12 +139,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         } else {
             this.let { ActivityCompat.requestPermissions(it, arrayOf(permission), requestCode) }
         }
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        coroutineContext.cancelChildren()
     }
 
 }
